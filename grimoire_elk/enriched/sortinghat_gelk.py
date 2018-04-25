@@ -63,6 +63,21 @@ class SortingHat(object):
                 user['email'] = identities[0].email
                 user['username'] = identities[0].username
         return user
+    
+    @classmethod
+    def get_gitlab_commit_username(cls, db, identity, source):
+        user = None
+
+        with db.connect() as session:
+            query = session.query(Identity).\
+                filter(Identity.name == identity['name'], Identity.email == identity['email'], Identity.source == source)
+            identities = query.all()
+            if identities:
+                user = {}
+                user['name'] = identities[0].name
+                user['web_url'] = identities[0].email
+                user['username'] = identities[0].username
+        return user
 
     @classmethod
     def add_identity(cls, db, identity, backend):
